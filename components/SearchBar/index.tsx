@@ -52,42 +52,44 @@ const SearchBar: FunctionComponent<SearchBarProps> = ({
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.modalContainer}>
+          <View style={styles.padder}>
+            <View style={styles.modalCard}>
+              <RadioButton
+                active={selectedSort === 'URUTKAN'}
+                onPress={selectValue}
+                value={'URUTKAN'}>
+                URUTKAN
+              </RadioButton>
+              <RadioButton
+                active={selectedSort === 'A-Z'}
+                onPress={selectValue}
+                value={'A-Z'}>
+                Nama A-Z
+              </RadioButton>
+              <RadioButton
+                active={selectedSort === 'Z-A'}
+                onPress={selectValue}
+                value={'Z-A'}>
+                Nama Z-A
+              </RadioButton>
+              <RadioButton
+                active={selectedSort === 'TERBARU'}
+                onPress={selectValue}
+                value={'TERBARU'}>
+                Tanggal Terbaru
+              </RadioButton>
+              <RadioButton
+                active={selectedSort === 'TERLAMA'}
+                onPress={selectValue}
+                value={'TERLAMA'}>
+                Tanggal Terlama
+              </RadioButton>
+            </View>
+          </View>
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
             style={styles.backDrop}
           />
-          <View style={styles.modalCard}>
-            <RadioButton
-              active={selectedSort === 'URUTKAN'}
-              onPress={selectValue}
-              value={'URUTKAN'}>
-              URUTKAN
-            </RadioButton>
-            <RadioButton
-              active={selectedSort === 'A-Z'}
-              onPress={selectValue}
-              value={'A-Z'}>
-              Nama A-Z
-            </RadioButton>
-            <RadioButton
-              active={selectedSort === 'Z-A'}
-              onPress={selectValue}
-              value={'Z-A'}>
-              Nama Z-A
-            </RadioButton>
-            <RadioButton
-              active={selectedSort === 'TERBARU'}
-              onPress={selectValue}
-              value={'TERBARU'}>
-              Tanggal Terbaru
-            </RadioButton>
-            <RadioButton
-              active={selectedSort === 'TERLAMA'}
-              onPress={selectValue}
-              value={'TERLAMA'}>
-              Tanggal Terlama
-            </RadioButton>
-          </View>
         </View>
       </Modal>
     </>
