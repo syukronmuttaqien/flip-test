@@ -5,7 +5,7 @@ import Transaction from './Transaction';
 const Stack = createNativeStackNavigator();
 
 const Screens = () => (
-  <Stack.Navigator>
+  <Stack.Navigator initialRouteName="transaction">
     <Stack.Screen name="transaction" component={Transaction} />
   </Stack.Navigator>
 );
