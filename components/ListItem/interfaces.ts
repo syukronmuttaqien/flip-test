@@ -1,3 +1,5 @@
+import { GestureResponderEvent } from "react-native";
+
 export interface DataItemProps {
   id?: string;
   amount?: number;
@@ -15,4 +17,5 @@ export interface DataItemProps {
 
 export interface ListItemProps {
   item: DataItemProps;
+  onPress?: (event: GestureResponderEvent) => void;
 }

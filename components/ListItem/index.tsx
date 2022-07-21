@@ -1,35 +1,69 @@
 import React, { FunctionComponent } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { ListItemProps } from './interfaces';
-import styles from './styles';
+import styles, { statusStyle } from './styles';
+import icons from '../../assets/icons';
+import { formatCurrency, indonesianDate } from '../../helper/Format';
 
 const ListItem: FunctionComponent<ListItemProps> = ({
   item,
+  onPress,
 }: ListItemProps) => {
+  const { status } = item;
+
+  // force all to upper case for good conditionings
+  const isChecking = status?.toUpperCase() === 'PENDING';
+  const isSuccess = status?.toUpperCase() === 'SUCCESS';
+
+  // Check the status and give style additional styling
+  const leadingStatusStyle = [
+    styles.leadingStatus,
+    isSuccess && statusStyle.success,
+    isChecking && statusStyle.checking,
+  ];
+  const boxStatusStyle = [
+    styles.statusContainer,
+    isSuccess && statusStyle.success,
+    isChecking && statusStyle.borderChecking,
+  ];
+
   return (
     // Container With Row Space Between
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.textContainerRow}>
         {/* Status Color on Left Side */}
-        <View style={styles.leadingStatus} />
+        <View style={leadingStatusStyle} />
         {/* Text Container */}
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
-            <Text style={styles.textTitle}>{item.sender_bank}</Text>
-            <Text style={styles.textTitle}>{item.beneficiary_bank}</Text>
+            <Text style={styles.textTitle}>
+              {item.sender_bank?.toUpperCase()}
+            </Text>
+            <Image style={styles.icon} source={icons.rightArrow} />
+            <Text style={styles.textTitle}>
+              {item.beneficiary_bank?.toUpperCase()}
+            </Text>
           </View>
           <Text style={styles.textRegular}>{item.beneficiary_name}</Text>
           <View style={styles.textRow}>
-            <Text style={styles.textRegular}>{item.amount}</Text>
-            <Text style={styles.textRegular}>{item.created_at}</Text>
+            <Text style={styles.textRegular}>
+              {formatCurrency(item.amount)}
+            </Text>
+            <Image source={icons.dot} style={styles.iconDot} />
+            <Text style={styles.textRegular}>
+              {indonesianDate(item.created_at)}
+            </Text>
           </View>
         </View>
       </View>
       {/* Status Text */}
-      <View style={styles.statusContainer}>
-        <Text style={styles.textStatus}>{item.status}</Text>
+      <View style={boxStatusStyle}>
+        <Text
+          style={[styles.textStatus, isChecking && statusStyle.textChecking]}>
+          {item.status}
+        </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

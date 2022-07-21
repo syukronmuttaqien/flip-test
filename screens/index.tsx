@@ -6,7 +6,11 @@ const Stack = createNativeStackNavigator();
 
 const Screens = () => (
   <Stack.Navigator initialRouteName="transaction">
-    <Stack.Screen name="transaction" component={Transaction} />
+    <Stack.Screen
+      options={{ headerShown: false }}
+      name="transaction"
+      component={Transaction}
+    />
   </Stack.Navigator>
 );
 
