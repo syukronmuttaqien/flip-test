@@ -57,6 +57,15 @@ export default StyleSheet.create({
     borderRadius: 18,
     width: '100%',
     padding: 16,
+    zIndex: 5,
+  },
+  padder: {
+    position: 'absolute',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000000AA',
     zIndex: 4,
+    paddingHorizontal: 16,
   },
 });

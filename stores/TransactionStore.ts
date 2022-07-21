@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { DataItemProps } from '../components/ListItem/interfaces';
-import { safeNewDate } from '../helper/Format';
+import { formatCurrency, safeNewDate } from '../helper/Format';
 import { getTransaction } from '../services/transaction';
 
 // State Management For Transaction
@@ -14,6 +14,9 @@ class TransactionStore {
 
   // For loading purpose when get Data from API
   isLoading = false;
+
+  keyword = '';
+  sortBy = 'URUTKAN';
 
   // make auto observable for this store
   constructor() {
@@ -53,19 +56,25 @@ class TransactionStore {
       const normalizeSenderBank = sender_bank?.toLowerCase();
       const normalizeBeneficiaryName = beneficiary_name?.toLowerCase();
       const normalizeBeneficiaryBank = beneficiary_bank?.toLowerCase();
+      const currency = formatCurrency(amount);
 
       // return true or false with some condition
       return (
         normalizeSenderBank?.includes(normalizeKeyword)
         || normalizeBeneficiaryName?.includes(normalizeKeyword)
         || normalizeBeneficiaryBank?.includes(normalizeKeyword)
+        || currency.includes(normalizeKeyword)
         || amount?.toString().includes(normalizeKeyword)
       );
     };
 
     // return filtered item as keyword
     runInAction(() => {
+      this.keyword = keyword;
       this.filteredData = this.data.filter((obj) => search(obj));
+      if (this.sortBy !== 'URUTKAN') {
+        this.doSort(this.sortBy);
+      }
     });
   }
 
@@ -75,27 +84,31 @@ class TransactionStore {
     // Better use sorting on API, as stated on above, Big O Notation will happen if data > 100
     // https://www.freecodecamp.org/news/big-o-notation-why-it-matters-and-why-it-doesnt-1674cfa8a23c/
     runInAction(() => {
+      this.sortBy = sortBy;
+
       if (sortBy === 'A-Z') {
-        this.filteredData = this.data.slice().sort((a, b) => (a.beneficiary_name || '').localeCompare((b.beneficiary_name) || ''));
+        this.filteredData = this.filteredData.slice().sort((a, b) => (a.beneficiary_name || '').localeCompare((b.beneficiary_name) || ''));
         return;
       }
 
       if (sortBy === 'Z-A') {
-        this.filteredData = this.data.slice().sort((a, b) => (b.beneficiary_name || '').localeCompare((a.beneficiary_name) || ''));
+        this.filteredData = this.filteredData.slice().sort((a, b) => (b.beneficiary_name || '').localeCompare((a.beneficiary_name) || ''));
         return;
       }
 
       if (sortBy === 'TERBARU') {
-        this.filteredData = this.data.slice().sort((a, b) => safeNewDate(b.created_at).getTime() - safeNewDate(a.created_at).getTime());
+        this.filteredData = this.filteredData.slice().sort((a, b) => safeNewDate(b.created_at).getTime() - safeNewDate(a.created_at).getTime());
         return;
       }
 
       if (sortBy === 'TERLAMA') {
-        this.filteredData = this.data.slice().sort((a, b) => safeNewDate(a.created_at).getTime() - safeNewDate(b.created_at).getTime());
+        this.filteredData = this.filteredData.slice().sort((a, b) => safeNewDate(a.created_at).getTime() - safeNewDate(b.created_at).getTime());
         return;
       }
 
-      this.filteredData = this.data;
+      if (this.keyword === '') {
+        this.filteredData = this.data;
+      }
     });
   }
 }
