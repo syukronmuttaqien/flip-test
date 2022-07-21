@@ -39,10 +39,11 @@ class TransactionStore {
   }
 
   doSearch(keyword: string) {
-    // this function will decrease a little bit performance, if want to speed up
-    // Better use filter on API it will increase performance on mobile significanly, 
+    // this filter function will decrease a little bit performance, if want to speed up
+    // Better use filter on API it will increase performance on mobile significanly,
     // because device only weighted by network, not by device resource
     // Big O Notation will happen if data > 100
+    // Disclaimer: everything has pros and cons :)
     // https://www.freecodecamp.org/news/big-o-notation-why-it-matters-and-why-it-doesnt-1674cfa8a23c/
     const normalizeKeyword = keyword.toLowerCase();
 
@@ -70,7 +71,7 @@ class TransactionStore {
 
 
   doSort(sortBy: string) {
-    // All of this function will decrease a little bit performance, if want to speed up
+    // this sort function will decrease a little bit performance, if want to speed up
     // Better use sorting on API, as stated on above, Big O Notation will happen if data > 100
     // https://www.freecodecamp.org/news/big-o-notation-why-it-matters-and-why-it-doesnt-1674cfa8a23c/
     runInAction(() => {

@@ -63,7 +63,7 @@ export default StyleSheet.create({
     marginBottom: 4,
   },
   iconDot: {
-    marginHorizontal: 4,
+    marginHorizontal: 6,
     width: 5,
     height: 5,
     marginBottom: 2,
