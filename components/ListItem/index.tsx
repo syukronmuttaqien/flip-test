@@ -5,6 +5,7 @@ import styles, { statusStyle } from './styles';
 import icons from '../../assets/icons';
 import { formatCurrency, indonesianDate } from '../../helper/Format';
 
+// For List Item on Transaction Screen
 const ListItem: FunctionComponent<ListItemProps> = ({
   item,
   onPress,

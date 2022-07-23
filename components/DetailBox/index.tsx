@@ -19,6 +19,7 @@ interface DetailBoxProps {
   item: DataItemProps;
 }
 
+// Created so Line of Code  File TransactionDetail can be minimalized
 const DetailBox: FunctionComponent<DetailBoxProps> = ({ item }) => {
   const [isShow, setIsShow] = useState(true);
 
