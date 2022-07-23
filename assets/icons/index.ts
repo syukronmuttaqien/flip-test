@@ -6,4 +6,5 @@ export default {
   search: require('./search.png'),
   radioActive: require('./radio-active.png'),
   radioInactive: require('./radio-inactive.png'),
+  copy: require('./copy.png'),
 };
