@@ -1,22 +1,31 @@
-export const formatCurrency = (nominal: any, currency = 'Rp', separator = '.') => {
+// For formating currency, for easy development on the future
+export const formatCurrency = (
+  nominal: any,
+  currency = 'Rp',
+  separator = '.',
+) => {
   if (isNaN(nominal)) {
     nominal = '';
   }
 
   if (nominal || nominal === '' || nominal === 0) {
-    return currency + nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+    return (
+      currency + nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator)
+    );
   }
 
   return '';
 };
 
+// for parsing date on typescript
 export const safeNewDate = (localDateTimeStr: any) => {
-
   var match = localDateTimeStr.match(
     /(\d{4})-(\d{2})-(\d{2})[\sT](\d{2}):(\d{2}):(\d{2})(.(\d+))?/,
   );
 
-  if (!match) { throw new Error('Invalid format.'); }
+  if (!match) {
+    throw new Error('Invalid format.');
+  }
 
   var [, year, month, date, hours, minutes, seconds, , millseconds] = match;
 
@@ -31,6 +40,7 @@ export const safeNewDate = (localDateTimeStr: any) => {
   );
 };
 
+// for convert to indonesian date, i think better use dayjs or momentjs, saving time on development
 export function indonesianDate(date: any) {
   const safeDate = safeNewDate(date);
   const newDate = new Date(safeDate);
