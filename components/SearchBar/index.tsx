@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import {
+  FlatList,
   Image,
   Modal,
   Text,
@@ -9,8 +10,31 @@ import {
 } from 'react-native';
 import icons from '../../assets/icons';
 import RadioButton from '../RadioButton';
-import { SearchBarProps } from './interfaces';
+import { RadioData, SearchBarProps } from './interfaces';
 import styles from './styles';
+
+const radios: Array<RadioData> = [
+  {
+    caption: 'URUTKAN',
+    value: 'URUTKAN',
+  },
+  {
+    caption: 'Nama A-Z',
+    value: 'Nama A-Z',
+  },
+  {
+    caption: 'Nama Z-A',
+    value: 'Nama Z-A',
+  },
+  {
+    caption: 'Tanggal Terbaru',
+    value: 'Tanggal Terbaru',
+  },
+  {
+    caption: 'Tanggal Terlama',
+    value: 'Tanggal Terlama',
+  },
+];
 
 const SearchBar: FunctionComponent<SearchBarProps> = ({
   onChangeText,
@@ -54,36 +78,18 @@ const SearchBar: FunctionComponent<SearchBarProps> = ({
         <View style={styles.modalContainer}>
           <View style={styles.padder}>
             <View style={styles.modalCard}>
-              <RadioButton
-                active={selectedSort === 'URUTKAN'}
-                onPress={selectValue}
-                value={'URUTKAN'}>
-                URUTKAN
-              </RadioButton>
-              <RadioButton
-                active={selectedSort === 'A-Z'}
-                onPress={selectValue}
-                value={'A-Z'}>
-                Nama A-Z
-              </RadioButton>
-              <RadioButton
-                active={selectedSort === 'Z-A'}
-                onPress={selectValue}
-                value={'Z-A'}>
-                Nama Z-A
-              </RadioButton>
-              <RadioButton
-                active={selectedSort === 'TERBARU'}
-                onPress={selectValue}
-                value={'TERBARU'}>
-                Tanggal Terbaru
-              </RadioButton>
-              <RadioButton
-                active={selectedSort === 'TERLAMA'}
-                onPress={selectValue}
-                value={'TERLAMA'}>
-                Tanggal Terlama
-              </RadioButton>
+              <FlatList
+                data={radios}
+                keyExtractor={item => item.value}
+                renderItem={({ item }) => (
+                  <RadioButton
+                    onPress={selectValue}
+                    active={selectedSort === item.value}
+                    value={item.value}>
+                    {item.caption}
+                  </RadioButton>
+                )}
+              />
             </View>
           </View>
           <TouchableOpacity

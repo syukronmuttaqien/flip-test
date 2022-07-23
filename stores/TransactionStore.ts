@@ -9,18 +9,31 @@ class TransactionStore {
   // Data for default data, it's a default state without sort and filter
   data: Array<DataItemProps> = [];
 
+  // Data selected for show on detail transaction
+  selected: DataItemProps = {};
+
   // Filtered Data is used for sorted data and filtered data using slice from data,
   filteredData: Array<DataItemProps> = [];
 
   // For loading purpose when get Data from API
   isLoading = false;
 
+  // keyword for search/filtering data
   keyword = '';
+
+  // for sorting purpose
   sortBy = 'URUTKAN';
 
   // make auto observable for this store
   constructor() {
     makeAutoObservable(this);
+  }
+
+  // Set Selected item so i can rendered on Transaction Detail Screen
+  setSelected(data: DataItemProps) {
+    runInAction(() => {
+      this.selected = data;
+    });
   }
 
   // Get list from transaction service using async for better readabilty
@@ -60,24 +73,23 @@ class TransactionStore {
 
       // return true or false with some condition
       return (
-        normalizeSenderBank?.includes(normalizeKeyword)
-        || normalizeBeneficiaryName?.includes(normalizeKeyword)
-        || normalizeBeneficiaryBank?.includes(normalizeKeyword)
-        || currency.includes(normalizeKeyword)
-        || amount?.toString().includes(normalizeKeyword)
+        normalizeSenderBank?.includes(normalizeKeyword) ||
+        normalizeBeneficiaryName?.includes(normalizeKeyword) ||
+        normalizeBeneficiaryBank?.includes(normalizeKeyword) ||
+        currency.includes(normalizeKeyword) ||
+        amount?.toString().includes(normalizeKeyword)
       );
     };
 
     // return filtered item as keyword
     runInAction(() => {
       this.keyword = keyword;
-      this.filteredData = this.data.filter((obj) => search(obj));
+      this.filteredData = this.data.filter(obj => search(obj));
       if (this.sortBy !== 'URUTKAN') {
         this.doSort(this.sortBy);
       }
     });
   }
-
 
   doSort(sortBy: string) {
     // this sort function will decrease a little bit performance, if want to speed up
@@ -86,23 +98,43 @@ class TransactionStore {
     runInAction(() => {
       this.sortBy = sortBy;
 
-      if (sortBy === 'A-Z') {
-        this.filteredData = this.filteredData.slice().sort((a, b) => (a.beneficiary_name || '').localeCompare((b.beneficiary_name) || ''));
+      if (sortBy === 'Nama A-Z') {
+        this.filteredData = this.filteredData
+          .slice()
+          .sort((a, b) =>
+            (a.beneficiary_name || '').localeCompare(b.beneficiary_name || ''),
+          );
         return;
       }
 
-      if (sortBy === 'Z-A') {
-        this.filteredData = this.filteredData.slice().sort((a, b) => (b.beneficiary_name || '').localeCompare((a.beneficiary_name) || ''));
+      if (sortBy === 'Nama Z-A') {
+        this.filteredData = this.filteredData
+          .slice()
+          .sort((a, b) =>
+            (b.beneficiary_name || '').localeCompare(a.beneficiary_name || ''),
+          );
         return;
       }
 
-      if (sortBy === 'TERBARU') {
-        this.filteredData = this.filteredData.slice().sort((a, b) => safeNewDate(b.created_at).getTime() - safeNewDate(a.created_at).getTime());
+      if (sortBy === 'Tanggal Terbaru') {
+        this.filteredData = this.filteredData
+          .slice()
+          .sort(
+            (a, b) =>
+              safeNewDate(b.created_at).getTime() -
+              safeNewDate(a.created_at).getTime(),
+          );
         return;
       }
 
-      if (sortBy === 'TERLAMA') {
-        this.filteredData = this.filteredData.slice().sort((a, b) => safeNewDate(a.created_at).getTime() - safeNewDate(b.created_at).getTime());
+      if (sortBy === 'Tanggal Terlama') {
+        this.filteredData = this.filteredData
+          .slice()
+          .sort(
+            (a, b) =>
+              safeNewDate(a.created_at).getTime() -
+              safeNewDate(b.created_at).getTime(),
+          );
         return;
       }
 

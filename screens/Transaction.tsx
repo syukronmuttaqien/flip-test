@@ -6,8 +6,9 @@ import ListItem from '../components/ListItem';
 import SearchBar from '../components/SearchBar';
 import { transactionStore } from '../stores/TransactionStore';
 import Colors from '../themes/Colors';
+import Loading from '../components/Loading';
 
-const Transaction = () => {
+const Transaction = ({ navigation }: any) => {
   // On First Screen mount, load The List
   useEffect(() => {
     transactionStore.getList();
@@ -27,6 +28,7 @@ const Transaction = () => {
           }}
         />
       </View>
+      <Loading show={transactionStore.isLoading} />
       <FlatList
         style={styles.spacerV}
         contentContainerStyle={styles.padder}
@@ -34,7 +36,15 @@ const Transaction = () => {
         extraData={transactionStore.filteredData}
         // use Footer for better look on spacing
         ListFooterComponent={<View style={styles.spacerV} />}
-        renderItem={({ item }) => <ListItem item={item} />}
+        renderItem={({ item }) => (
+          <ListItem
+            onPress={() => {
+              transactionStore.setSelected(item);
+              navigation.navigate('transaction-detail');
+            }}
+            item={item}
+          />
+        )}
       />
     </SafeAreaView>
   );
