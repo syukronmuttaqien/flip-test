@@ -14,3 +14,4 @@
 - `helper` -> for store all helper function file, like formating number or date
 - `screens` -> for store all screen
 - `themes` -> for store all theming file, like colors, fontStyle and etc.
+- using mobX for state management
